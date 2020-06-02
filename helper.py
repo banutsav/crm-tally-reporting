@@ -1,5 +1,7 @@
 import pandas as pd
 import props
+import datetime
+from datetime import date
 
 # revenue and lead calculation for individual based on lead sharing
 def revenue_lead_individual(df):
@@ -25,3 +27,101 @@ def revenue_lead_individual(df):
 		#print(row['Offer ID'], row['Product Category'], row['Owner'], row['Shared to 1'], row['Shared to 2'], factor)
 
 	return revenue, leads
+
+# get a list of biweekly dates for this FY
+def get_biweekly_dates():
+	# get todays month
+	this_month = date.today().month
+	# set stopping month to one month from now
+	next_month = this_month + 2
+	# start from the creation date
+	bw_date = props.CREATION_DATE
+	# 2 weeks diff
+	two_weeks = datetime.timedelta(weeks = 2)
+	# init and populate resultset
+	results = []
+	while bw_date.month != next_month:
+		results.append(bw_date)
+		bw_date = bw_date + two_weeks
+	return results
+
+# construct dataframe based on records on a quarterly basis
+def construct_quarterly_dataframe(person, cat, data, column, result, created):
+	# iterate over the quarters
+	for i in range(1,len(props.QUARTERS)):
+		# start and end for that quarter
+		start = props.QUARTERS[i - 1]
+		end = props.QUARTERS[i]
+		# get results for that quarter
+		dfq = data.loc[(data[column] >= start) & (data[column] < end), :]
+		obj = construct_person_record(person, cat, dfq) # helper.gs
+		# set the quarter
+		obj['quarter'] = 'Q' + str(i)
+		obj['creation-date'] = created
+		result = result.append(obj, ignore_index=True)
+			
+	# results beyond last quarter
+	df_ny = data.loc[data[column] >= end, :]
+	obj = construct_person_record(person, cat, df_ny) # helper.gs
+	obj['quarter'] = 'NEXT-FY'
+	obj['creation-date'] = created
+	# append row to result
+	result = result.append(obj, ignore_index=True)
+	return result
+
+# iterate across the biweekly dates and consruct the biweekly performance report
+def construct_biweekly_df(person, cat, data, column, result):
+	# get the set of bi-weekly dates
+	bw_dates = get_biweekly_dates()
+	# iterate across the biweekly dates
+	for i in range(1,len(bw_dates)):
+		# get start and end for that bi-week
+		start = bw_dates[i - 1]
+		end = bw_dates[i]
+		# extract data from dataframe and construct row for that person
+		df = data.loc[(data[column] >= start) & (data[column] < end), :]
+		obj = construct_person_record(person, cat, df) # helper.gs
+		# set the start and end dates
+		obj['start-date'] = start
+		obj['end-date'] = end
+		result = result.append(obj, ignore_index=True)
+
+	return result
+
+# get a single output row for a person and product category
+def construct_person_record(person, cat, data):
+	# split dataframes according to where person is owner, share to 1 or shared to 2
+	df_1 = data.loc[data['Owner'] == person]
+	df_2 = data.loc[data['Shared to 1'] == person]
+	df_3 = data.loc[data['Shared to 2'] == person]
+
+	# calculate revenue and leads where owner
+	revenue_1, leads_1 = revenue_lead_individual(df_1) # helper.py 
+	# calculate revenue and lead breakdown where first share
+	revenue_2, leads_2 = revenue_lead_individual(df_2) # helper.py
+	# calculate revenue and lead breakdown where second share
+	revenue_3, leads_3 = revenue_lead_individual(df_3) # helper.py
+
+	obj = {
+	'person': person , 'product-group': cat
+	# where person is owner
+	, 'orders-where-owner': df_1.shape[0]
+	, 'order-ids-where-owner': df_1['Offer ID'].tolist()
+	, 'total-revenue-where-owner': revenue_1
+	, 'total-leads-where-owner': leads_1
+	# where person is shared to 1
+	, 'orders-where-shared-1': df_2.shape[0]
+	, 'order-ids-where-shared-1': df_2['Offer ID'].tolist()
+	, 'total-revenue-where-shared-1': revenue_2
+	, 'total-leads-where-shared-1': leads_2
+	# where person is shared to 2
+	, 'orders-where-shared-2': df_3.shape[0]
+	, 'order-ids-where-shared-2': df_3['Offer ID'].tolist()
+	, 'total-revenue-where-shared-2': revenue_3
+	, 'total-leads-where-shared-2': leads_3
+	# cumulative
+	, 'total-revenue': revenue_1 + revenue_2 + revenue_3
+	, 'total-leads': leads_1 + leads_2 + leads_3
+	}
+
+	return obj
