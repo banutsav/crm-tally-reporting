@@ -57,6 +57,8 @@ def construct_quarterly_dataframe(person, cat, data, column, result, created):
 		obj = construct_person_record(person, cat, dfq) # helper.gs
 		# set the quarter
 		obj['quarter'] = 'Q' + str(i)
+		obj['start'] = start
+		obj['end'] = end - datetime.timedelta(days=1) # get end of that quarter
 		obj['creation-date'] = created
 		result = result.append(obj, ignore_index=True)
 			
@@ -64,6 +66,7 @@ def construct_quarterly_dataframe(person, cat, data, column, result, created):
 	df_ny = data.loc[data[column] >= end, :]
 	obj = construct_person_record(person, cat, df_ny) # helper.gs
 	obj['quarter'] = 'NEXT-FY'
+	obj['start'] = end
 	obj['creation-date'] = created
 	# append row to result
 	result = result.append(obj, ignore_index=True)
@@ -125,3 +128,65 @@ def construct_person_record(person, cat, data):
 	}
 
 	return obj
+
+# for one product group, group the revenue on a biweekly basis
+def group_biweekly_revenue(data, cat,column, result):
+	# get the set of bi-weekly dates
+	bw_dates = get_biweekly_dates()
+	# iterate across the biweekly dates
+	for i in range(1,len(bw_dates)):
+		# get start and end for that bi-week
+		start = bw_dates[i - 1]
+		end = bw_dates[i]
+		# extract data from dataframe and construct row for that person
+		df = data.loc[(data[column] >= start) & (data[column] < end), :]
+		# calculated revenue sum
+		revenue = df[props.REVENUE_COL].sum()
+		# append row to result
+		result = result.append({'product-group': cat
+			, 'start-date': start
+			, 'end-date': end 
+			, 'order-booking-value': revenue
+			, 'number-of-orders': df.shape[0]
+			, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group
+			}, ignore_index=True)
+
+
+	return result
+
+# for one product group, group the revenue on a biweekly basis
+def group_quarterly_revenue(data, cat, column, result):
+	# iterate over the quarters
+	for i in range(1,len(props.QUARTERS)):
+		# start and end for that quarter
+		start = props.QUARTERS[i - 1]
+		end = props.QUARTERS[i]
+		# get results for that quarter
+		df = data.loc[(data[column] >= start) & (data[column] < end), :]
+		# calculated revenue sum
+		revenue = df[props.REVENUE_COL].sum()
+		# append row to result
+		result = result.append({'product-group': cat
+			, 'quarter': 'Q' + str(i)
+			, 'start': start
+			, 'end': end - datetime.timedelta(days=1) # get end of that quarter
+			, 'order-booking-value': revenue
+			, 'number-of-orders': df.shape[0]
+			, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group
+			}, ignore_index=True)
+
+	# results beyond last quarter
+	df = data.loc[data[column] >= end, :]
+	# calculated revenue sum
+	revenue = df[props.REVENUE_COL].sum()
+	# append row to result
+	result = result.append({'product-group': cat
+		, 'quarter': 'NEXT-FY'
+		, 'start': end
+		, 'end': '' 
+		, 'order-booking-value': revenue
+		, 'number-of-orders': df.shape[0]
+		, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group
+		}, ignore_index=True)
+	
+	return result
