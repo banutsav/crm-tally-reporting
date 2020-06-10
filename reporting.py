@@ -58,10 +58,12 @@ if __name__ == '__main__':
 	powon_bw_df.to_excel(writer, 'po-won-biweekly', index=False) # po_won_biweekly.py
 	powon_q_df.to_excel(writer, 'po-won-quarterly', index=False) # po_won_quarterly.py
 
-	group_leads_q_df.to_excel(writer, 'group-leads-quarterly', index=False) # leads_product_quarterly.py
-	group_leads_bw.to_excel(writer, 'group-leads-biweekly', index=False) # leads_product_biweekly.py
-	group_powon_bw.to_excel(writer, 'group-powon-biweekly', index=False) # powon_product_biweekly.py
-	group_powon_q.to_excel(writer, 'group-powon-quarterly', index=False) # powon_product_quarterly.py
+	group_leads_q_df.to_excel(writer, 'product-leads-quarterly', index=False) # leads_product_quarterly.py
+	group_leads_bw.to_excel(writer, 'product-leads-biweekly', index=False) # leads_product_biweekly.py
+	group_powon_bw.to_excel(writer, 'product-powon-biweekly', index=False) # powon_product_biweekly.py
+	group_powon_q.to_excel(writer, 'product-powon-quarterly', index=False) # powon_product_quarterly.py
+	# write the main crm data set
+	crmdf.to_excel(writer, 'crm-master', index=False)
 	writer.save()
 
 	print('Results saved to', props.OUTFILE)

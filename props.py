@@ -2,17 +2,17 @@ import pandas as pd
 import datetime
 
 # set close date cutoff
-CLOSE_DATE = pd.Timestamp(datetime.date(2020, 3, 31))
+CLOSE_DATE = pd.Timestamp(datetime.date(2020, 1, 1)) #datetime.date(2020, 3, 31)
 
 # creation date for sales funnel performance
-CREATION_DATE = pd.Timestamp(datetime.date(2020, 4, 1))
+CREATION_DATE = pd.Timestamp(datetime.date(2020, 1, 1)) #datetime.date(2020, 4, 1)
 
 # input file
-IN_FILE = 'input/Leads and opportunities_FY20-21.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx'
-IN_TAB = 'CRM report' # 'CRM report, Sheet1, Revised Sample set_2620'
+IN_FILE = 'input/sample-set-rv-1.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx, sample-set-rv-1
+IN_TAB = 'Revised Sample set_2620' # 'CRM report, Sheet1, Revised Sample set_2620'
 
 # which column to pick the revenue from
-REVENUE_COL = 'Updated Revenue (Updated Revenue)' # 'New Amount (Opportunity Id), Updated Revenue (Updated Revenue)'
+REVENUE_COL = 'New Amount (Opportunity Id)' # 'New Amount (Opportunity Id), Updated Revenue (Updated Revenue)'
 
 # purchase timeframe for sales funnel and performance report
 UP_PURCH_COL = 'Updated Purchase Timeframe (Updated Updated Purchase Timeframe)'
@@ -43,16 +43,17 @@ SALES_FUNNEL_PERFORMANCE_HEADER = ['person', 'product-group', 'creation-date', '
 ]
 
 # revenue organized in quarters  for product groups
-GROUP_SALES_FUNNEL_HEADER = ['product-group', 'quarter', 'start', 'end', 'order-booking-value', 'number-of-orders', 'order-ids']
+GROUP_SALES_FUNNEL_HEADER = ['product-group', 'creation-date','quarter', 'start', 'end', 'order-booking-value', 'number-of-orders', 'order-ids']
 
 # start date breakdown for the quarters
 QUARTERS = [
-	pd.Timestamp(datetime.date(2020, 4, 1)) # 1st april
-	, pd.Timestamp(datetime.date(2020, 7, 1)) # 1st july
-	, pd.Timestamp(datetime.date(2020, 10, 1)) # 1st october 
-	, pd.Timestamp(datetime.date(2021, 1, 1)) # 1st Jan next year
-	, pd.Timestamp(datetime.date(2021, 4, 1)) # 1st april next year
+	pd.Timestamp(datetime.date(2019, 4, 1)) # 1st april
+	, pd.Timestamp(datetime.date(2019, 7, 1)) # 1st july
+	, pd.Timestamp(datetime.date(2019, 10, 1)) # 1st october 
+	, pd.Timestamp(datetime.date(2020, 1, 1)) # 1st Jan next year
+	, pd.Timestamp(datetime.date(2020, 4, 1)) # 1st april next year
 ]
+
 
 # biweekly lead creation report header
 BIWEEKLY_PERFORMANCE_HEADER = ['person', 'product-group', 'start-date', 'end-date'

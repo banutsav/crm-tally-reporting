@@ -13,21 +13,28 @@ def get_leads_by_group_quarterly(df):
 	# iterate across the product categories
 	print('Leads by Product Group aggregated quarterly...')
 	for cat in pc:
-		# rows of that product category and contract ID created
+		# rows of that product category and contract ID created before creation date
 		data = df.loc[(df['Product Category'] == cat)  # product category match
 		& ((df['Opportunity Status'] == 'Open') | (df['Opportunity Status'].isnull()))
 		& (df['Created On'] < props.CREATION_DATE)
 		, :]
 		# nothing to do if all rows empty
-		if data.shape[0] == 0:
-			continue
+		if data.shape[0] != 0:
+			result = group_quarterly_revenue(data, cat, result, 'before-' + props.CREATION_DATE.strftime("%d-%b-%Y"))
 
-		result = group_quarterly_revenue(data, cat, result)
+		# rows of that product category and contract ID created after creation date
+		data = df.loc[(df['Product Category'] == cat)  # product category match
+		& ((df['Opportunity Status'] == 'Open') | (df['Opportunity Status'].isnull()))
+		& (df['Created On'] >= props.CREATION_DATE)
+		, :]
+		# nothing to do if all rows empty
+		if data.shape[0] != 0:
+			result = group_quarterly_revenue(data, cat, result, 'after-' + props.CREATION_DATE.strftime("%d-%b-%Y"))
 
 	return result
 
 # group the revenue by quarters
-def group_quarterly_revenue(data, cat, result):
+def group_quarterly_revenue(data, cat, result, created):
 	# iterate over the quarters
 	for i in range(1,len(props.QUARTERS)):
 		# start and end for that quarter
@@ -40,6 +47,7 @@ def group_quarterly_revenue(data, cat, result):
 		revenue = df[props.REVENUE_COL].sum()
 		# append row to result
 		result = result.append({'product-group': cat
+			, 'creation-date': created
 			, 'quarter': 'Q' + str(i) 
 			, 'start': start
 			, 'end': end - datetime.timedelta(days=1) # get end of that quarter
@@ -54,6 +62,7 @@ def group_quarterly_revenue(data, cat, result):
 	revenue = df[props.REVENUE_COL].sum()
 	# append row to result
 	result = result.append({'product-group': cat
+		, 'creation-date': created
 		, 'quarter': 'NEXT-FY'
 		, 'start': end 
 		, 'order-booking-value': revenue

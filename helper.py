@@ -28,6 +28,13 @@ def revenue_lead_individual(df):
 
 	return revenue, leads
 
+# get the next weekday from a date
+def next_weekday(d, weekday):
+    days_ahead = weekday - d.weekday()
+    if days_ahead <= 0: # Target day already happened this week
+        days_ahead += 7
+    return d + datetime.timedelta(days_ahead)
+
 # get a list of biweekly dates for this FY
 def get_biweekly_dates():
 	# get todays month
@@ -35,7 +42,7 @@ def get_biweekly_dates():
 	# set stopping month to one month from now
 	next_month = this_month + 2
 	# start from the creation date
-	bw_date = props.CREATION_DATE
+	bw_date = next_weekday(props.CREATION_DATE, 5) # monday = 0
 	# 2 weeks diff
 	two_weeks = datetime.timedelta(weeks = 2)
 	# init and populate resultset
@@ -86,7 +93,7 @@ def construct_biweekly_df(person, cat, data, column, result):
 		obj = construct_person_record(person, cat, df) # helper.gs
 		# set the start and end dates
 		obj['start-date'] = start
-		obj['end-date'] = end
+		obj['end-date'] = end - datetime.timedelta(days=1)
 		result = result.append(obj, ignore_index=True)
 
 	return result
@@ -145,7 +152,7 @@ def group_biweekly_revenue(data, cat,column, result):
 		# append row to result
 		result = result.append({'product-group': cat
 			, 'start-date': start
-			, 'end-date': end 
+			, 'end-date': end - datetime.timedelta(days=1)
 			, 'order-booking-value': revenue
 			, 'number-of-orders': df.shape[0]
 			, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group
