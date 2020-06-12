@@ -4,7 +4,7 @@ import props as props
 import helper as hp
 
 # iterate over all the leads accorsing to creaton date and group on a biweekly basis
-def leads_created_biweekly(df):
+def leads_created_biweekly(df, biweekly_dates):
 	# init empty result dataframe
 	result = pd.DataFrame(columns = props.BIWEEKLY_PERFORMANCE_HEADER)
 
@@ -33,6 +33,6 @@ def leads_created_biweekly(df):
 			if data.shape[0] == 0:
 				continue
 
-			result = hp.construct_biweekly_df(person, cat, data, props.CREATED_ON_COL, result)
+			result = hp.construct_biweekly_df(person, cat, data, props.CREATED_ON_COL, result, biweekly_dates)
 
 	return result

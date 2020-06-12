@@ -4,7 +4,7 @@ import props as props
 import helper as hp
 
 # for each group get all leads grouped on a biweekly basis 
-def get_leads_by_group_biweekly(df):
+def get_leads_by_group_biweekly(df, biweekly_dates):
 	# init empty result dataframe
 	result = pd.DataFrame(columns = props.GROUP_PERFORMANCE_BIWEEKLY)
 	# unique product categories
@@ -19,6 +19,6 @@ def get_leads_by_group_biweekly(df):
 		if data.shape[0] == 0:
 			continue
 
-		result = hp.group_biweekly_revenue(data, cat, props.CREATED_ON_COL, result)
+		result = hp.group_biweekly_revenue(data, cat, props.CREATED_ON_COL, result, biweekly_dates)
 
 	return result

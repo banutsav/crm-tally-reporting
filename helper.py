@@ -35,6 +35,19 @@ def next_weekday(d, weekday):
         days_ahead += 7
     return d + datetime.timedelta(days_ahead)
 
+# biweekly dates from a schedule of dates
+def get_biweekly_dates_from_schedule():
+	results = []
+	# properties file
+	properties = pd.ExcelFile(props.PROPERTIES_FILE)
+	# biweekly dates
+	bw_dates =  pd.read_excel(properties, props.DATE_TAB)
+	# iterate across the biweekly dates
+	for index, row in bw_dates.iterrows():
+		results.append({'start': row['Start Date'], 'end': row['End Date'], 'slot': row['Slot']})
+	
+	return results
+
 # get a list of biweekly dates for this FY
 def get_biweekly_dates():
 	# get todays month
@@ -80,20 +93,21 @@ def construct_quarterly_dataframe(person, cat, data, column, result, created):
 	return result
 
 # iterate across the biweekly dates and consruct the biweekly performance report
-def construct_biweekly_df(person, cat, data, column, result):
-	# get the set of bi-weekly dates
-	bw_dates = get_biweekly_dates()
+def construct_biweekly_df(person, cat, data, column, result, biweekly_dates):
+	#bw_dates = get_biweekly_dates() DISCONTINUED
+	
 	# iterate across the biweekly dates
-	for i in range(1,len(bw_dates)):
+	for x in biweekly_dates:
 		# get start and end for that bi-week
-		start = bw_dates[i - 1]
-		end = bw_dates[i]
+		start = x['start']
+		end = x['end']
 		# extract data from dataframe and construct row for that person
-		df = data.loc[(data[column] >= start) & (data[column] < end), :]
+		df = data.loc[(data[column] >= start) & (data[column] <= end), :]
 		obj = construct_person_record(person, cat, df) # helper.gs
 		# set the start and end dates
 		obj['start-date'] = start
-		obj['end-date'] = end - datetime.timedelta(days=1)
+		obj['end-date'] = end
+		obj['week-number'] = 'W' + str(x['slot'])
 		result = result.append(obj, ignore_index=True)
 
 	return result
@@ -137,22 +151,23 @@ def construct_person_record(person, cat, data):
 	return obj
 
 # for one product group, group the revenue on a biweekly basis
-def group_biweekly_revenue(data, cat,column, result):
-	# get the set of bi-weekly dates
-	bw_dates = get_biweekly_dates()
+def group_biweekly_revenue(data, cat,column, result, biweekly_dates):
+	#bw_dates = get_biweekly_dates() DISCONTINUED
+	
 	# iterate across the biweekly dates
-	for i in range(1,len(bw_dates)):
+	for x in biweekly_dates:
 		# get start and end for that bi-week
-		start = bw_dates[i - 1]
-		end = bw_dates[i]
+		start = x['start']
+		end = x['end']
 		# extract data from dataframe and construct row for that person
-		df = data.loc[(data[column] >= start) & (data[column] < end), :]
+		df = data.loc[(data[column] >= start) & (data[column] <= end), :]
 		# calculated revenue sum
 		revenue = df[props.REVENUE_COL].sum()
 		# append row to result
 		result = result.append({'product-group': cat
 			, 'start-date': start
-			, 'end-date': end - datetime.timedelta(days=1)
+			, 'end-date': end
+			, 'week-number': 'W' + str(x['slot'])
 			, 'order-booking-value': revenue
 			, 'number-of-orders': df.shape[0]
 			, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group

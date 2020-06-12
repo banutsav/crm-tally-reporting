@@ -22,28 +22,33 @@ import powon_product_quarterly as powpq
 if __name__ == '__main__':
 	start = time.time()
 	print('Execution started...')
+
 	# read data into dataframe
 	xls = pd.ExcelFile(props.IN_FILE)
 	crmdf = pd.read_excel(xls, props.IN_TAB)
-	
+	# get set of biweekly dates
+	biweekly_dates = hp.get_biweekly_dates_from_schedule()
+
 	# ht summary report
 	ht_sum_df = gp.ht_summary(crmdf) # groups.py
 	# individual summary
 	indi_sum_df = indi.indi_summary(crmdf) # individual.py
 	# sales funnel and performnce calculation for individuals
 	sfp_df = sfp.sales_funnel_performance_data(crmdf) # sales_performance.py
+	
 	# bi-weekly performance summary
-	lc_bw_df = bw.leads_created_biweekly(crmdf) # indi_biweek.py
+	lc_bw_df = bw.leads_created_biweekly(crmdf, biweekly_dates) # indi_biweek.py
 	# po won biweekly performance
-	powon_bw_df = powon.po_won_biweekly(crmdf) # po_won_biweekly.py
+	powon_bw_df = powon.po_won_biweekly(crmdf, biweekly_dates) # po_won_biweekly.py
+	
 	# po won by quarters
 	powon_q_df = powon_q.po_won_quarterly(crmdf) # po_won_quarterly.py
 	# per product group find leads created on quarterly basis
 	group_leads_q_df = lpq.get_leads_by_group_quarterly(crmdf) # leads_product_quarterly.py
 	# per product group, aggregate leads on a biweekly basis
-	group_leads_bw = lpbw.get_leads_by_group_biweekly(crmdf) # leads_product_biweekly.py
+	group_leads_bw = lpbw.get_leads_by_group_biweekly(crmdf, biweekly_dates) # leads_product_biweekly.py
 	# per product group won opportunities grouped biwekly
-	group_powon_bw = powpbw.get_powon_by_group_biweekly(crmdf) # powon_product_biweekly.py
+	group_powon_bw = powpbw.get_powon_by_group_biweekly(crmdf, biweekly_dates) # powon_product_biweekly.py
 	# per product get opportunities won a quarterly basis
 	group_powon_q = powpq.get_powon_by_group_quarterly(crmdf) # powon_product_quarterly.py
 
@@ -62,9 +67,11 @@ if __name__ == '__main__':
 	group_leads_bw.to_excel(writer, 'product-leads-biweekly', index=False) # leads_product_biweekly.py
 	group_powon_bw.to_excel(writer, 'product-powon-biweekly', index=False) # powon_product_biweekly.py
 	group_powon_q.to_excel(writer, 'product-powon-quarterly', index=False) # powon_product_quarterly.py
+	
 	# write the main crm data set
 	crmdf.to_excel(writer, 'crm-master', index=False)
 	writer.save()
+	
 
 	print('Results saved to', props.OUTFILE)
 	# calculate execution time

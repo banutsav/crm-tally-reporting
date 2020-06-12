@@ -4,7 +4,7 @@ import props as props
 import helper as hp
 
 # contracts won group based on close date on a bi-weekly basis
-def po_won_biweekly(df):
+def po_won_biweekly(df, biweekly_dates):
 	# init empty result dataframe
 	result = pd.DataFrame(columns = props.BIWEEKLY_PERFORMANCE_HEADER)
 
@@ -35,6 +35,6 @@ def po_won_biweekly(df):
 			if data.shape[0] == 0:
 				continue
 
-			result = hp.construct_biweekly_df(person, cat, data, props.CLOSE_DATE_COL, result)
+			result = hp.construct_biweekly_df(person, cat, data, props.CLOSE_DATE_COL, result, biweekly_dates)
 
 	return result

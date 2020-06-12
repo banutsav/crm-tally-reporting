@@ -10,6 +10,9 @@ CREATION_DATE = pd.Timestamp(datetime.date(2020, 1, 1)) #datetime.date(2020, 4, 
 # input file
 IN_FILE = 'input/sample-set-rv-1.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx, sample-set-rv-1
 IN_TAB = 'Revised Sample set_2620' # 'CRM report, Sheet1, Revised Sample set_2620'
+PROPERTIES_FILE = 'input/properties.xlsx'
+
+DATE_TAB = 'biweek' # properties file for biweekly dates
 
 # which column to pick the revenue from
 REVENUE_COL = 'New Amount (Opportunity Id)' # 'New Amount (Opportunity Id), Updated Revenue (Updated Revenue)'
@@ -56,7 +59,7 @@ QUARTERS = [
 
 
 # biweekly lead creation report header
-BIWEEKLY_PERFORMANCE_HEADER = ['person', 'product-group', 'start-date', 'end-date'
+BIWEEKLY_PERFORMANCE_HEADER = ['person', 'product-group', 'start-date', 'end-date', 'week-number'
 , 'orders-where-owner', 'order-ids-where-owner', 'total-revenue-where-owner', 'total-leads-where-owner'
 ,'orders-where-shared-1', 'order-ids-where-shared-1', 'total-revenue-where-shared-1', 'total-leads-where-shared-1'
 , 'orders-where-shared-2', 'order-ids-where-shared-2', 'total-revenue-where-shared-2', 'total-leads-where-shared-2'
@@ -64,4 +67,4 @@ BIWEEKLY_PERFORMANCE_HEADER = ['person', 'product-group', 'start-date', 'end-dat
 ]
 
 # leads_product_biweekly.py
-GROUP_PERFORMANCE_BIWEEKLY = ['product-group', 'start-date', 'end-date', 'order-booking-value', 'number-of-orders', 'order-ids']
+GROUP_PERFORMANCE_BIWEEKLY = ['product-group', 'start-date', 'end-date', 'week-number', 'order-booking-value', 'number-of-orders', 'order-ids']
