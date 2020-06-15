@@ -2,20 +2,20 @@ import pandas as pd
 import datetime
 
 # set close date cutoff
-CLOSE_DATE = pd.Timestamp(datetime.date(2020, 1, 1)) #datetime.date(2020, 3, 31)
+CLOSE_DATE = pd.Timestamp(datetime.date(2020, 3, 31)) #datetime.date(2020, 3, 31)
 
 # creation date for sales funnel performance
-CREATION_DATE = pd.Timestamp(datetime.date(2020, 1, 1)) #datetime.date(2020, 4, 1)
+CREATION_DATE = pd.Timestamp(datetime.date(2020, 4, 1)) #datetime.date(2020, 4, 1)
 
 # input file
-IN_FILE = 'input/sample-set-rv-1.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx, sample-set-rv-1
-IN_TAB = 'Revised Sample set_2620' # 'CRM report, Sheet1, Revised Sample set_2620'
+IN_FILE = 'input/Leads and opportunities_FY20-21.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx, sample-set-rv-1
+IN_TAB = 'CRM report' # 'CRM report, Sheet1, Revised Sample set_2620'
 PROPERTIES_FILE = 'input/properties.xlsx'
 
 DATE_TAB = 'biweek' # properties file for biweekly dates
 
 # which column to pick the revenue from
-REVENUE_COL = 'New Amount (Opportunity Id)' # 'New Amount (Opportunity Id), Updated Revenue (Updated Revenue)'
+REVENUE_COL = 'Updated Revenue (Updated Revenue)' # 'New Amount (Opportunity Id), Updated Revenue (Updated Revenue)'
 
 # purchase timeframe for sales funnel and performance report
 UP_PURCH_COL = 'Updated Purchase Timeframe (Updated Updated Purchase Timeframe)'

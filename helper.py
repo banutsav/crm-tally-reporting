@@ -44,7 +44,7 @@ def get_biweekly_dates_from_schedule():
 	bw_dates =  pd.read_excel(properties, props.DATE_TAB)
 	# iterate across the biweekly dates
 	for index, row in bw_dates.iterrows():
-		results.append({'start': row['Start Date'], 'end': row['End Date'], 'slot': row['Slot']})
+		results.append({'start': row['Start Date'], 'end': row['End Date'], 'slot': row['EM']})
 	
 	return results
 
@@ -107,7 +107,7 @@ def construct_biweekly_df(person, cat, data, column, result, biweekly_dates):
 		# set the start and end dates
 		obj['start-date'] = start
 		obj['end-date'] = end
-		obj['week-number'] = 'W' + str(x['slot'])
+		obj['week-number'] = x['slot']
 		result = result.append(obj, ignore_index=True)
 
 	return result
@@ -167,7 +167,7 @@ def group_biweekly_revenue(data, cat,column, result, biweekly_dates):
 		result = result.append({'product-group': cat
 			, 'start-date': start
 			, 'end-date': end
-			, 'week-number': 'W' + str(x['slot'])
+			, 'week-number': x['slot']
 			, 'order-booking-value': revenue
 			, 'number-of-orders': df.shape[0]
 			, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group
