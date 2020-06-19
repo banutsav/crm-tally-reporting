@@ -16,4 +16,7 @@ def get_quarter(tallydate):
 		
 	# next FY
 	return 'NEXT-FY'
-	
+
+# calculate before or after current FY start
+def get_before_after_fy(tallydate):
+	pass	

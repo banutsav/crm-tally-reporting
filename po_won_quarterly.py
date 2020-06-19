@@ -10,6 +10,7 @@ def po_won_quarterly(df):
 
 	# unique individuals
 	people = (df['Owner'].unique().tolist()) + (df['Shared to 1'].unique().tolist()) + (df['Shared to 2'].unique().tolist())
+	people = hp.get_unique_list(people)
 
 	# unique product categories
 	groups = df['Product Category'].unique().tolist()

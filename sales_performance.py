@@ -10,6 +10,7 @@ def sales_funnel_performance_data(df):
 
 	# unique individuals
 	people = (df['Owner'].unique().tolist()) + (df['Shared to 1'].unique().tolist()) + (df['Shared to 2'].unique().tolist())
+	people = hp.get_unique_list(people)
 
 	# unique product categories
 	groups = df['Product Category'].unique().tolist()
@@ -36,7 +37,7 @@ def sales_funnel_performance_data(df):
 					, 'before-' + props.CREATION_DATE.strftime("%d-%b-%Y"))
 
 			# records after the creation date
-			data_1 = df.loc[
+			data = df.loc[
 			(
 				(df['Owner'] == person) # if person is owner
 				| (df['Shared to 1'] == person) # if person is part of shared 1
@@ -48,7 +49,7 @@ def sales_funnel_performance_data(df):
 			, :]
 
 			# nothing to do if all rows empty
-			if data_1.shape[0] != 0:
+			if data.shape[0] != 0:
 				result = hp.construct_quarterly_dataframe(person, cat, data, props.UP_PURCH_COL, result
 					, 'after-' + props.CREATION_DATE.strftime("%d-%b-%Y"))
 

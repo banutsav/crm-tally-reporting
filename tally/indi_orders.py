@@ -27,6 +27,7 @@ def individual_orders_bagged(df):
 	for index, row in data.iterrows():
 		# get the quarter
 		quarter = hp.get_quarter(row['Date'])
+		# get before or after FY start date
 		obj = {'person': row['Agent'], 'product-group': row['Cost Centre']
 		, 'gross-total': row['gross-total'], 'date': row['Date'], 'quarter': quarter}
 		results = results.append(obj, ignore_index=True)

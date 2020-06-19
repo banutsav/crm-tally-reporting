@@ -1,7 +1,15 @@
+# using numpy.unique  
+import numpy as np
 import pandas as pd
 import props
 import datetime
 from datetime import date
+
+# get a set of unique elements from a list
+def get_unique_list(list1):
+	x = np.array(list1)
+	list2 = np.unique(x)
+	return list2
 
 # revenue and lead calculation for individual based on lead sharing
 def revenue_lead_individual(df):

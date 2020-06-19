@@ -23,6 +23,9 @@ QUARTERS = [
 	, pd.Timestamp(datetime.date(2021, 4, 1)) # 1st april next year
 ]
 
+# for order invoicing
+FY_START_DATE = pd.Timestamp(datetime.date(2020, 4, 1)) # 1st april
+
 # indi_orders.py
 INDI_ORDER_BAGGED_HEADER = ['person', 'product-group', 'gross-total', 'date', 'quarter']
 # indi_payments_due.py
