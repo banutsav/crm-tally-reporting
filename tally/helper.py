@@ -19,4 +19,6 @@ def get_quarter(tallydate):
 
 # calculate before or after current FY start
 def get_before_after_fy(tallydate):
-	pass	
+	if tallydate >= props.FY_START_DATE:
+		return ('after-' + props.FY_START_DATE.strftime("%d-%b-%Y"))
+	return ('before-' + props.FY_START_DATE.strftime("%d-%b-%Y"))	

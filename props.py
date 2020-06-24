@@ -17,8 +17,8 @@ QUARTERS = [
 ]
 
 # input file
-IN_FILE = 'input/Product Analysis Report- 19.06.2020.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx, sample-set-rv-1
-IN_TAB = 'HI-TECH REPORT FORMAT' # 'CRM report, Sheet1, Revised Sample set_2620'
+IN_FILE = 'input/Product Analysis Report V3.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx, sample-set-rv-1
+IN_TAB = 'Sheet1' # 'CRM report, Sheet1, Revised Sample set_2620'
 PROPERTIES_FILE = 'input/properties.xlsx'
 
 DATE_TAB = 'biweek' # properties file for biweekly dates

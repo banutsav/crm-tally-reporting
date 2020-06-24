@@ -27,9 +27,11 @@ def individual_orders_bagged(df):
 	for index, row in data.iterrows():
 		# get the quarter
 		quarter = hp.get_quarter(row['Date'])
-		# get before or after FY start date
+		# get before or after FY start
+		invoiced_date = hp.get_before_after_fy(row['Date'])
+		# construct object
 		obj = {'person': row['Agent'], 'product-group': row['Cost Centre']
-		, 'gross-total': row['gross-total'], 'date': row['Date'], 'quarter': quarter}
+		, 'gross-total': row['gross-total'], 'date': row['Date'], 'quarter': quarter, 'invoiced-date': invoiced_date}
 		results = results.append(obj, ignore_index=True)
 	
 	return results

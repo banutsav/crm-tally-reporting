@@ -102,19 +102,18 @@ def construct_quarterly_dataframe(person, cat, data, column, result, created):
 
 # iterate across the biweekly dates and consruct the biweekly performance report
 def construct_biweekly_df(person, cat, data, column, result, biweekly_dates):
-	#bw_dates = get_biweekly_dates() DISCONTINUED
 	
 	# iterate across the biweekly dates
 	for x in biweekly_dates:
 		# get start and end for that bi-week
 		start = x['start']
-		end = x['end']
+		end = x['end'] + datetime.timedelta(days = 1)
 		# extract data from dataframe and construct row for that person
-		df = data.loc[(data[column] >= start) & (data[column] <= end), :]
+		df = data.loc[(data[column] >= start) & (data[column] < end), :]
 		obj = construct_person_record(person, cat, df) # helper.gs
 		# set the start and end dates
 		obj['start-date'] = start
-		obj['end-date'] = end
+		obj['end-date'] = x['end']
 		obj['week-number'] = x['slot']
 		result = result.append(obj, ignore_index=True)
 
@@ -166,15 +165,15 @@ def group_biweekly_revenue(data, cat,column, result, biweekly_dates):
 	for x in biweekly_dates:
 		# get start and end for that bi-week
 		start = x['start']
-		end = x['end']
+		end = x['end'] + datetime.timedelta(days = 1)
 		# extract data from dataframe and construct row for that person
-		df = data.loc[(data[column] >= start) & (data[column] <= end), :]
+		df = data.loc[(data[column] >= start) & (data[column] < end), :]
 		# calculated revenue sum
 		revenue = df[props.REVENUE_COL].sum()
 		# append row to result
 		result = result.append({'product-group': cat
 			, 'start-date': start
-			, 'end-date': end
+			, 'end-date': x['end']
 			, 'week-number': x['slot']
 			, 'order-booking-value': revenue
 			, 'number-of-orders': df.shape[0]

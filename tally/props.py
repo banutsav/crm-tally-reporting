@@ -13,6 +13,7 @@ SALES_TAB = 'Sales Register'
 RECEIVABLES = 'input/Receivables.xlsx'
 RECEIVABLES_TAB = 'Bills Receivable'
 STOCK = 'input/Stock.xlsx'
+STOCK_TAB = 'Stock Summary'
 
 # start date breakdown for the quarters
 QUARTERS = [
@@ -27,9 +28,13 @@ QUARTERS = [
 FY_START_DATE = pd.Timestamp(datetime.date(2020, 4, 1)) # 1st april
 
 # indi_orders.py
-INDI_ORDER_BAGGED_HEADER = ['person', 'product-group', 'gross-total', 'date', 'quarter']
+INDI_ORDER_BAGGED_HEADER = ['person', 'product-group', 'gross-total', 'date', 'quarter', 'invoiced-date']
 # indi_payments_due.py
 INDI_PAYMENTS_DUE_HEADER = ['person', 'product-group', 'payments-due', 'date', 'quarter']
+# direct_cost.py
+DIRECT_COST_HEADER = ['product', 'direct-cost', 'inventory-value']
+# opening_debtors.py
+OPENING_DEBTORS_HEADER = ['product', 'pending']
 
 # columns
 RECEIVABLES_DATE = 'Date'

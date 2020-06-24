@@ -25,6 +25,7 @@ def get_leads_by_group_quarterly(df):
 		# rows of that product category and contract ID created after creation date
 		data = df.loc[(df['Product Category'] == cat)  # product category match
 		& ((df['Opportunity Status'] == 'Open') | (df['Opportunity Status'].isnull()))
+		& (df['Lead Status'] != 'Disqualified') # lead not disqualified
 		& (df['Created On'] >= props.CREATION_DATE)
 		, :]
 		# nothing to do if all rows empty

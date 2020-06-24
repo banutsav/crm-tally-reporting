@@ -12,11 +12,14 @@ def leads_created_biweekly(df, biweekly_dates):
 	people = (df['Owner'].unique().tolist()) + (df['Shared to 1'].unique().tolist()) + (df['Shared to 2'].unique().tolist())
 	people = hp.get_unique_list(people)
 
+
 	# unique product categories
 	groups = df['Product Category'].unique().tolist()
+
 	# iterate over the set of people
 	print('Bi-weekly lead creation...')
 	for person in people:
+		
 		# check all groups for that person
 		for cat in groups:
 			# get records which are after creation date
@@ -33,7 +36,6 @@ def leads_created_biweekly(df, biweekly_dates):
 			# nothing to do if all rows empty
 			if data.shape[0] == 0:
 				continue
-
 			result = hp.construct_biweekly_df(person, cat, data, props.CREATED_ON_COL, result, biweekly_dates)
 
 	return result
