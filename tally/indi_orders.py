@@ -21,17 +21,25 @@ def individual_orders_bagged(df):
 
 	# iterate over the set of people
 	print('Individual Orders Bagged...')
-	data = df[['Date', 'Agent', 'Cost Centre', 'gross-total']]
+	data = df[['Date', 'Voucher No.', 'Agent', 'Cost Centre', 'gross-total']]
 	
 	# iterate over all results
 	for index, row in data.iterrows():
+		
+		# disregard cost center = lease, treasury
+		if row['Cost Centre'] in props.NOT_PRODUCT_GROUPS:
+			continue
+
 		# get the quarter
 		quarter = hp.get_quarter(row['Date'])
-		# get before or after FY start
-		invoiced_date = hp.get_before_after_fy(row['Date'])
+		
+		# get before or after FY start using the voucher number
+		invoiced_date = hp.get_before_after_fy(row['Voucher No.'])
+
 		# construct object
 		obj = {'person': row['Agent'], 'product-group': row['Cost Centre']
-		, 'gross-total': row['gross-total'], 'date': row['Date'], 'quarter': quarter, 'invoiced-date': invoiced_date}
+		, 'gross-total': row['gross-total'], 'date': row['Date'], 'quarter': quarter
+		, 'invoiced-date': invoiced_date, 'voucher-number': row['Voucher No.']}
 		results = results.append(obj, ignore_index=True)
 	
 	return results

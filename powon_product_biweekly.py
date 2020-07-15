@@ -14,8 +14,8 @@ def get_powon_by_group_biweekly(df, biweekly_dates):
 	for cat in pc:
 		# rows of that product category and contract ID created
 		data = df.loc[(df['Product Category'] == cat)  # product category match
-		& (df['Contract ID (Opportunity Id)'].notnull()) # non null contract number
-		& (df['Contract ID (Opportunity Id)'] != '0') # some rows have contract id set to 0
+		& (df[props.CONTRACT_ID].notnull()) # non null contract number
+		& (df[props.CONTRACT_ID] != '0') # some rows have contract id set to 0
 		& (df['Opportunity Status'] == 'Won')
 		, :]
 		# nothing to do if all rows empty

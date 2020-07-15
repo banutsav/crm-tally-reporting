@@ -4,9 +4,9 @@ import props as props
 import helper as hp
 
 # quarterly breakdown of sales performance
-def po_won_quarterly(df):
+def sales_funnel_performance_with_phase_data(df):
 	# init empty result dataframe
-	result = pd.DataFrame(columns = props.SALES_FUNNEL_PERFORMANCE_HEADER)
+	result = pd.DataFrame(columns = props.SALES_FUNNEL_PERFORMANCE_WITH_PHASE_HEADER)
 
 	# unique individuals
 	people = (df['Owner'].unique().tolist()) + (df['Shared 1'].unique().tolist()) + (df['Shared 2'].unique().tolist())
@@ -15,11 +15,12 @@ def po_won_quarterly(df):
 	# unique product categories
 	groups = df['Product Category'].unique().tolist()
 	# iterate over the set of people
-	print('PO Won Quarterly...')
+	print('Sales Funnel Performance Summary with Pipeline Phase Data...')
 	for person in people:
+		
 		# check all groups for that person
 		for cat in groups:
-			# get records which are after creation date
+			# records before the creation date
 			data = df.loc[
 			(
 				(df['Owner'] == person) # if person is owner
@@ -27,17 +28,17 @@ def po_won_quarterly(df):
 				| (df['Shared 2'] == person) # if person is part of shared 2
 			) # data for that person 
 			& (df['Product Category'] == cat) # and that category
-			& (df[props.CONTRACT_ID].notnull()) # non null contract number
-			& (df[props.CONTRACT_ID] != '0') # some rows have contract id set to 0
-			& (df[props.CLOSE_DATE_COL] >= props.CLOSE_DATE)
+			& ((df['Opportunity Status'] == 'Open') | (df['Opportunity Status'].isnull()))
+			& (df['Lead Status'] != 'Disqualified') # lead not disqualified
+			& (df[props.CREATED_ON_COL] < props.CREATION_DATE)
 			, :]
 
 			# nothing to do if all rows empty
 			if data.shape[0] != 0:
-				result = hp.construct_quarterly_dataframe(person, cat, data, props.CLOSE_DATE_COL, result
-					, 'after-' + props.CLOSE_DATE.strftime("%d-%b-%Y"))
+				result = hp.construct_quarterly_dataframe_with_phase(person, cat, data, props.UP_PURCH_COL, result
+					, 'before-' + props.CREATION_DATE.strftime("%d-%b-%Y"))
 
-			# get records which are after creation date
+			# records after the creation date
 			data = df.loc[
 			(
 				(df['Owner'] == person) # if person is owner
@@ -45,14 +46,14 @@ def po_won_quarterly(df):
 				| (df['Shared 2'] == person) # if person is part of shared 2
 			) # data for that person 
 			& (df['Product Category'] == cat) # and that category
-			& (df[props.CONTRACT_ID].notnull()) # non null contract number
-			& (df[props.CONTRACT_ID] != '0') # some rows have contract id set to 0
-			& (df[props.CLOSE_DATE_COL] < props.CLOSE_DATE)
+			& ((df['Opportunity Status'] == 'Open') | (df['Opportunity Status'].isnull()))
+			& (df[props.CREATED_ON_COL] >= props.CREATION_DATE)
 			, :]
 
 			# nothing to do if all rows empty
 			if data.shape[0] != 0:
-				result = hp.construct_quarterly_dataframe(person, cat, data, props.CLOSE_DATE_COL, result
-					, 'before-' + props.CLOSE_DATE.strftime("%d-%b-%Y"))
+				result = hp.construct_quarterly_dataframe_with_phase(person, cat, data, props.UP_PURCH_COL, result
+					, 'after-' + props.CREATION_DATE.strftime("%d-%b-%Y"))
 
 	return result
+

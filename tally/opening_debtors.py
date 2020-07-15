@@ -10,6 +10,11 @@ def get_opening_debtors(df):
 	df = df.dropna(subset=['Ldgr Product'])
 	# iterate over all results
 	for index, row in df.iterrows():
+
+		# disregard product group = lease, treasury
+		if row['Ldgr Product'] in props.NOT_PRODUCT_GROUPS:
+			continue
+
 		# get the quarter
 		obj = {'product': row['Ldgr Product'], 'pending': row['Pending']}
 		results = results.append(obj, ignore_index=True)

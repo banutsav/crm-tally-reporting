@@ -9,7 +9,7 @@ def sales_funnel_performance_data(df):
 	result = pd.DataFrame(columns = props.SALES_FUNNEL_PERFORMANCE_HEADER)
 
 	# unique individuals
-	people = (df['Owner'].unique().tolist()) + (df['Shared to 1'].unique().tolist()) + (df['Shared to 2'].unique().tolist())
+	people = (df['Owner'].unique().tolist()) + (df['Shared 1'].unique().tolist()) + (df['Shared 2'].unique().tolist())
 	people = hp.get_unique_list(people)
 
 	# unique product categories
@@ -23,13 +23,13 @@ def sales_funnel_performance_data(df):
 			data = df.loc[
 			(
 				(df['Owner'] == person) # if person is owner
-				| (df['Shared to 1'] == person) # if person is part of shared 1
-				| (df['Shared to 2'] == person) # if person is part of shared 2
+				| (df['Shared 1'] == person) # if person is part of shared 1
+				| (df['Shared 2'] == person) # if person is part of shared 2
 			) # data for that person 
 			& (df['Product Category'] == cat) # and that category
 			& ((df['Opportunity Status'] == 'Open') | (df['Opportunity Status'].isnull()))
 			& (df['Lead Status'] != 'Disqualified') # lead not disqualified
-			& (df['Created On'] < props.CREATION_DATE)
+			& (df[props.CREATED_ON_COL] < props.CREATION_DATE)
 			, :]
 
 			# nothing to do if all rows empty
@@ -41,12 +41,12 @@ def sales_funnel_performance_data(df):
 			data = df.loc[
 			(
 				(df['Owner'] == person) # if person is owner
-				| (df['Shared to 1'] == person) # if person is part of shared 1
-				| (df['Shared to 2'] == person) # if person is part of shared 2
+				| (df['Shared 1'] == person) # if person is part of shared 1
+				| (df['Shared 2'] == person) # if person is part of shared 2
 			) # data for that person 
 			& (df['Product Category'] == cat) # and that category
 			& ((df['Opportunity Status'] == 'Open') | (df['Opportunity Status'].isnull()))
-			& (df['Created On'] >= props.CREATION_DATE)
+			& (df[props.CREATED_ON_COL] >= props.CREATION_DATE)
 			, :]
 
 			# nothing to do if all rows empty

@@ -11,6 +11,7 @@ import helper as hp
 import individual as indi
 import groups as gp
 import sales_performance as sfp
+import sales_funnel_pipeline as sfp_wp
 import indi_biweek as bw
 import po_won_biweekly as powon
 import po_won_quarterly as powon_q
@@ -25,16 +26,19 @@ if __name__ == '__main__':
 
 	# read data into dataframe
 	xls = pd.ExcelFile(props.IN_FILE)
-	crmdf = pd.read_excel(xls, props.IN_TAB)
+	crmdf = pd.read_excel(xls, xls.sheet_names[0]) # read first sheet | props.IN_TAB
+
 	# get set of biweekly dates
 	biweekly_dates = hp.get_biweekly_dates_from_schedule()
-
+	
 	# ht summary report
 	ht_sum_df = gp.ht_summary(crmdf) # groups.py
 	# individual summary
 	indi_sum_df = indi.indi_summary(crmdf) # individual.py
+	
 	# sales funnel and performnce calculation for individuals
 	sfp_df = sfp.sales_funnel_performance_data(crmdf) # sales_performance.py
+	sfp_wp_df = sfp_wp.sales_funnel_performance_with_phase_data(crmdf) # sales_funnel_pipeline.py
 	
 	# bi-weekly performance summary
 	lc_bw_df = bw.leads_created_biweekly(crmdf, biweekly_dates) # indi_biweek.py
@@ -51,13 +55,15 @@ if __name__ == '__main__':
 	group_powon_bw = powpbw.get_powon_by_group_biweekly(crmdf, biweekly_dates) # powon_product_biweekly.py
 	# per product get opportunities won a quarterly basis
 	group_powon_q = powpq.get_powon_by_group_quarterly(crmdf) # powon_product_quarterly.py
-
+	
 	# save data to file
 	writer = ExcelWriter(props.OUTFILE)
+	
 	ht_sum_df.to_excel(writer, 'product-group', index=False) # groups.py
 	indi_sum_df.to_excel(writer, 'individual', index=False) # individual.py
 	
 	sfp_df.to_excel(writer, 'sales-funnel-performance', index=False) # sales_performance.py
+	sfp_wp_df.to_excel(writer, 'sales-funnel-phase', index=False) # sales_funnel_pipeline.py
 	
 	lc_bw_df.to_excel(writer, 'leads-created-biweekly', index=False) # indi_biweek.py
 	powon_bw_df.to_excel(writer, 'po-won-biweekly', index=False) # po_won_biweekly.py
@@ -72,8 +78,8 @@ if __name__ == '__main__':
 	crmdf.to_excel(writer, 'crm-master', index=False)
 	writer.save()
 	
-
 	print('Results saved to', props.OUTFILE)
 	# calculate execution time
 	end = time.time()
 	print('Execution finished in',str(round(end - start,2)),'secs')
+	input('You can close this window now...')

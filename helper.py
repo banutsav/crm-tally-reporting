@@ -22,9 +22,9 @@ def revenue_lead_individual(df):
 		
 		# calculate sharing factor for this order
 		factor = 1
-		if pd.isnull(row['Shared to 1']) == False:
+		if pd.isnull(row['Shared 1']) == False:
 			factor += 1
-		if pd.isnull(row['Shared to 2']) == False:
+		if pd.isnull(row['Shared 2']) == False:
 			factor += 1
 		
 		# add to total revenue and leads
@@ -82,6 +82,7 @@ def construct_quarterly_dataframe(person, cat, data, column, result, created):
 		end = props.QUARTERS[i]
 		# get results for that quarter
 		dfq = data.loc[(data[column] >= start) & (data[column] < end), :]
+
 		obj = construct_person_record(person, cat, dfq) # helper.gs
 		# set the quarter
 		obj['quarter'] = 'Q' + str(i)
@@ -92,12 +93,91 @@ def construct_quarterly_dataframe(person, cat, data, column, result, created):
 			
 	# results beyond last quarter
 	df_ny = data.loc[data[column] >= end, :]
+	
 	obj = construct_person_record(person, cat, df_ny) # helper.gs
 	obj['quarter'] = 'NEXT-FY'
 	obj['start'] = end
 	obj['creation-date'] = created
 	# append row to result
 	result = result.append(obj, ignore_index=True)
+	return result
+
+# construct dataframe based on records on a quarterly basis for a particular pipeline phase
+def construct_quarterly_dataframe_with_phase(person, cat, data, column, result, created):
+	# iterate over the quarters
+	for i in range(1,len(props.QUARTERS)):
+		# start and end for that quarter
+		start = props.QUARTERS[i - 1]
+		end = props.QUARTERS[i]
+
+		for phase in props.PIPELINE_PHASES:
+
+			# get results for that quarter and that phase
+			dfq = data.loc[
+			(data[column] >= start) & (data[column] < end) 
+			& (data[props.PIPELINE_PHASE_COL].str.contains(phase))
+			, :]
+
+			obj = construct_person_record(person, cat, dfq) # helper.gs
+			# set the quarter and phase
+			obj['phase'] = phase
+			obj['quarter'] = 'Q' + str(i)
+			obj['start'] = start
+			obj['end'] = end - datetime.timedelta(days=1) # get end of that quarter
+			obj['creation-date'] = created
+			obj['updated-purchase-timeframes'] = dfq[props.UP_PURCH_COL].dt.strftime("%d/%m/%y").tolist()
+			#print(dfq[props.UP_PURCH_COL].dt.strftime("%d/%m/%y").tolist())
+			result = result.append(obj, ignore_index=True)
+		
+		# get results for that quarter and phase == '' which should be categorized as LEADS
+		dfq = data.loc[
+		(data[column] >= start) & (data[column] < end) 
+		& (data[props.PIPELINE_PHASE_COL].isnull())
+		, :]
+
+		obj = construct_person_record(person, cat, dfq) # helper.gs
+		# set the quarter and phase
+		obj['phase'] = 'Leads'
+		obj['quarter'] = 'Q' + str(i)
+		obj['start'] = start
+		obj['end'] = end - datetime.timedelta(days=1) # get end of that quarter
+		obj['creation-date'] = created
+		obj['updated-purchase-timeframes'] = dfq[props.UP_PURCH_COL].dt.strftime("%d/%m/%y").tolist()
+		#print(dfq[props.UP_PURCH_COL].dt.strftime("%d/%m/%y").tolist())
+		result = result.append(obj, ignore_index=True)
+
+	# results beyond last quarter
+	for phase in props.PIPELINE_PHASES:
+
+		df_ny = data.loc[
+		(data[column] >= end) 
+		& (data[props.PIPELINE_PHASE_COL].str.contains(phase))
+		, :]
+	
+		obj = construct_person_record(person, cat, df_ny) # helper.gs
+		obj['phase'] = phase
+		obj['quarter'] = 'NEXT-FY'
+		obj['start'] = end
+		obj['creation-date'] = created
+		obj['updated-purchase-timeframes'] = df_ny[props.UP_PURCH_COL].dt.strftime("%d/%m/%y").tolist()
+		# append row to result
+		result = result.append(obj, ignore_index=True)
+
+	# results beyond last quarter and phase == '' which should be categorized as LEADS
+	df_ny = data.loc[
+	(data[column] >= end) 
+	& (data[props.PIPELINE_PHASE_COL].isnull())
+	, :]
+	
+	obj = construct_person_record(person, cat, df_ny) # helper.gs
+	obj['phase'] = 'Leads'
+	obj['quarter'] = 'NEXT-FY'
+	obj['start'] = end
+	obj['creation-date'] = created
+	obj['updated-purchase-timeframes'] = df_ny[props.UP_PURCH_COL].dt.strftime("%d/%m/%y").tolist()
+	# append row to result
+	result = result.append(obj, ignore_index=True)
+	
 	return result
 
 # iterate across the biweekly dates and consruct the biweekly performance report
@@ -123,8 +203,8 @@ def construct_biweekly_df(person, cat, data, column, result, biweekly_dates):
 def construct_person_record(person, cat, data):
 	# split dataframes according to where person is owner, share to 1 or shared to 2
 	df_1 = data.loc[data['Owner'] == person]
-	df_2 = data.loc[data['Shared to 1'] == person]
-	df_3 = data.loc[data['Shared to 2'] == person]
+	df_2 = data.loc[data['Shared 1'] == person]
+	df_3 = data.loc[data['Shared 2'] == person]
 
 	# calculate revenue and leads where owner
 	revenue_1, leads_1 = revenue_lead_individual(df_1) # helper.py 

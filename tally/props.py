@@ -8,11 +8,11 @@ OUTFILE = 'tally-results.xlsx'
 
 # input files
 
-SALES = 'input/Sales.xlsx'
+SALES = 'input/Sales.xls'
 SALES_TAB = 'Sales Register'
-RECEIVABLES = 'input/Receivables.xlsx'
+RECEIVABLES = 'input/Receivables.xls'
 RECEIVABLES_TAB = 'Bills Receivable'
-STOCK = 'input/Stock.xlsx'
+STOCK = 'input/Stock.xls'
 STOCK_TAB = 'Stock Summary'
 
 # start date breakdown for the quarters
@@ -28,9 +28,9 @@ QUARTERS = [
 FY_START_DATE = pd.Timestamp(datetime.date(2020, 4, 1)) # 1st april
 
 # indi_orders.py
-INDI_ORDER_BAGGED_HEADER = ['person', 'product-group', 'gross-total', 'date', 'quarter', 'invoiced-date']
+INDI_ORDER_BAGGED_HEADER = ['person', 'product-group', 'gross-total', 'date', 'quarter', 'invoiced-date', 'voucher-number']
 # indi_payments_due.py
-INDI_PAYMENTS_DUE_HEADER = ['person', 'product-group', 'payments-due', 'date', 'quarter']
+INDI_PAYMENTS_DUE_HEADER = ['person', 'product-group', 'payments-due', 'date', 'quarter', 'invoiced-date', 'reference-number']
 # direct_cost.py
 DIRECT_COST_HEADER = ['product', 'direct-cost', 'inventory-value']
 # opening_debtors.py
@@ -38,3 +38,6 @@ OPENING_DEBTORS_HEADER = ['product', 'pending']
 
 # columns
 RECEIVABLES_DATE = 'Date'
+
+# product groups not to be considered
+NOT_PRODUCT_GROUPS = ['Lease', 'Treasury'] # indi_orders.py

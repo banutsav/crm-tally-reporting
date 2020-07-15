@@ -17,8 +17,22 @@ def get_quarter(tallydate):
 	# next FY
 	return 'NEXT-FY'
 
-# calculate before or after current FY start
-def get_before_after_fy(tallydate):
-	if tallydate >= props.FY_START_DATE:
+# calculate before or after using the voucher number
+def get_before_after_fy(voucher):
+	year = voucher[5:7]
+	#print(voucher, year)
+	if year == '20':
 		return ('after-' + props.FY_START_DATE.strftime("%d-%b-%Y"))
-	return ('before-' + props.FY_START_DATE.strftime("%d-%b-%Y"))	
+	else:
+		return ('before-' + props.FY_START_DATE.strftime("%d-%b-%Y"))
+
+# get before or after based on the reference number
+def get_before_after_ref_no(reference):
+	# replace any spaces
+	reference = reference.replace(" ", "")
+	year = reference[5:7]
+	#print(reference, year)
+	if year == '20':
+		return ('after-' + props.FY_START_DATE.strftime("%d-%b-%Y"))
+	else:
+		return ('before-' + props.FY_START_DATE.strftime("%d-%b-%Y"))
