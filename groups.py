@@ -8,6 +8,7 @@ def ht_summary(df):
 	result = pd.DataFrame(columns = props.HT_SUMMARY_HEADER)
 	# unique product categories
 	pc = df['Product Category'].unique().tolist()
+	print('Product Group summary...')
 	# iterate across the product categories
 	for cat in pc:
 		# rows of that product category and contract ID created

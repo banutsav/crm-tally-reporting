@@ -19,7 +19,9 @@ def get_quarter(tallydate):
 
 # calculate before or after using the voucher number
 def get_before_after_fy(voucher):
-	year = voucher[5:7]
+	# remove spaces
+	voucher = voucher.replace(" ", "")
+	year = voucher[5:7] 
 	#print(voucher, year)
 	if year == '20':
 		return ('after-' + props.FY_START_DATE.strftime("%d-%b-%Y"))

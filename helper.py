@@ -31,8 +31,12 @@ def revenue_lead_individual(df):
 		revenue += (row[props.REVENUE_COL] / factor)
 		leads += (1 / factor)
 		
-		# DEBUG
-		#print(row['Offer ID'], row['Product Category'], row['Owner'], row['Shared to 1'], row['Shared to 2'], factor)
+	# round off decimel
+	if pd.isnull(revenue) == False:
+		revenue = round(revenue)
+
+	if pd.isnull(leads) == False:
+		leads = round(leads,2)
 
 	return revenue, leads
 
@@ -75,6 +79,17 @@ def get_biweekly_dates():
 
 # construct dataframe based on records on a quarterly basis
 def construct_quarterly_dataframe(person, cat, data, column, result, created):
+	
+	# purchase timeframe before first quarter
+	df_bfq = data.loc[(data[column] < props.QUARTERS[0]), :]
+	obj = construct_person_record(person, cat, df_bfq) # helper.gs
+	# set the quarter
+	obj['quarter'] = 'Before-Q1'
+	obj['start'] = ""
+	obj['end'] = props.QUARTERS[0] # get end of that quarter
+	obj['creation-date'] = created
+	result = result.append(obj, ignore_index=True)
+
 	# iterate over the quarters
 	for i in range(1,len(props.QUARTERS)):
 		# start and end for that quarter
@@ -83,7 +98,7 @@ def construct_quarterly_dataframe(person, cat, data, column, result, created):
 		# get results for that quarter
 		dfq = data.loc[(data[column] >= start) & (data[column] < end), :]
 
-		obj = construct_person_record(person, cat, dfq) # helper.gs
+		obj = construct_person_record(person, cat, dfq) # helper.py
 		# set the quarter
 		obj['quarter'] = 'Q' + str(i)
 		obj['start'] = start
@@ -255,7 +270,7 @@ def group_biweekly_revenue(data, cat,column, result, biweekly_dates):
 			, 'start-date': start
 			, 'end-date': x['end']
 			, 'week-number': x['slot']
-			, 'order-booking-value': revenue
+			, 'order-booking-value': round(revenue)
 			, 'number-of-orders': df.shape[0]
 			, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group
 			}, ignore_index=True)
@@ -279,7 +294,7 @@ def group_quarterly_revenue(data, cat, column, result):
 			, 'quarter': 'Q' + str(i)
 			, 'start': start
 			, 'end': end - datetime.timedelta(days=1) # get end of that quarter
-			, 'order-booking-value': revenue
+			, 'order-booking-value': round(revenue)
 			, 'number-of-orders': df.shape[0]
 			, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group
 			}, ignore_index=True)
@@ -293,7 +308,7 @@ def group_quarterly_revenue(data, cat, column, result):
 		, 'quarter': 'NEXT-FY'
 		, 'start': end
 		, 'end': '' 
-		, 'order-booking-value': revenue
+		, 'order-booking-value': round(revenue)
 		, 'number-of-orders': df.shape[0]
 		, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group
 		}, ignore_index=True)

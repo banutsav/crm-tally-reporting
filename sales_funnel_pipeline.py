@@ -47,6 +47,7 @@ def sales_funnel_performance_with_phase_data(df):
 			) # data for that person 
 			& (df['Product Category'] == cat) # and that category
 			& ((df['Opportunity Status'] == 'Open') | (df['Opportunity Status'].isnull()))
+			& (df['Lead Status'] != 'Disqualified') # lead not disqualified
 			& (df[props.CREATED_ON_COL] >= props.CREATION_DATE)
 			, :]
 

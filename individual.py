@@ -42,8 +42,4 @@ def indi_summary(df):
 			# append row to result
 			result = result.append(obj, ignore_index=True)
 
-			# DEBUG
-			#if data.shape[0] != 0:
-			#	print('Calculating for',person,cat,'=',revenue,leads)
-
 	return result

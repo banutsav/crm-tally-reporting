@@ -4,7 +4,7 @@ import pandas as pd
 import datetime
 
 # output file
-OUTFILE = 'tally-results.xlsx'
+OUTFILE = 'tally-results-'  + pd.Timestamp.now().strftime("%d-%m-%Y") + '.xlsx' # output file
 
 # input files
 

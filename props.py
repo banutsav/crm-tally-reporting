@@ -20,6 +20,7 @@ QUARTERS = [
 IN_FILE = 'input/data.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx, sample-set-rv-1
 IN_TAB = 'sheet' # 'CRM report, Sheet1, Revised Sample set_2620'
 PROPERTIES_FILE = 'input/properties.xlsx'
+LOST_CASES_FILE = 'input/lost.xlsx'
 
 DATE_TAB = 'biweek' # properties file for biweekly dates
 
@@ -43,6 +44,9 @@ CONTRACT_ID = 'Contract ID'
 
 # contract close date, used in po-won-biweekly
 CLOSE_DATE_COL = 'Actual Close Date'
+
+# joint report offer id's like
+JOINT_REPORT_OFFER_IDS = 'HT21'
 
 OUTFILE = 'results-' + pd.Timestamp.now().strftime("%d-%m-%Y") + '.xlsx' # output file
 
@@ -87,3 +91,15 @@ BIWEEKLY_PERFORMANCE_HEADER = ['person', 'product-group', 'start-date', 'end-dat
 
 # leads_product_biweekly.py
 GROUP_PERFORMANCE_BIWEEKLY = ['product-group', 'start-date', 'end-date', 'week-number', 'order-booking-value', 'number-of-orders', 'order-ids']
+
+# expired leads
+EXPIRED_LEADS_HEADER = ['person','product-group'
+, 'orders-where-owner', 'order-ids-where-owner', 'total-revenue-where-owner', 'total-leads-where-owner'
+,'orders-where-shared-1', 'order-ids-where-shared-1', 'total-revenue-where-shared-1', 'total-leads-where-shared-1'
+, 'orders-where-shared-2', 'order-ids-where-shared-2', 'total-revenue-where-shared-2', 'total-leads-where-shared-2'
+, 'total-revenue', 'total-leads']
+
+# joint report
+JOINT_REPORT_HEADER = ['offer-id', 'product-group', 'contract-no', 'opportunity-status', 'updated-revenue'
+, 'agent-1', 'agent-2', 'agent-3', 'created-on', 'actual-close-date'
+]

@@ -9,12 +9,13 @@ def individual_orders_bagged(df):
 	results = pd.DataFrame(columns = props.INDI_ORDER_BAGGED_HEADER)
 	
 	# change null values with 0
-	df['Gross Total (G-I-J)'].fillna(0, inplace = True)
-	df['CGST'].fillna(0, inplace = True)
-	df['SGST'].fillna(0, inplace = True)
+	#df['Gross Total (G-I-J)'].fillna(0, inplace = True)
+	#df['CGST'].fillna(0, inplace = True)
+	#df['SGST'].fillna(0, inplace = True)
+	df['Value'].fillna(0, inplace = True)
 
 	# add new column to dataframe = G - I - J
-	df['gross-total'] = df['Gross Total (G-I-J)'] - df['CGST'] - df['SGST']
+	df['gross-total'] = df['Value'] #df['Gross Total (G-I-J)'] - df['CGST'] - df['SGST']
 
 	# drop rows for blank people and bank products
 	df = df.dropna(subset=['Agent', 'Cost Centre'])

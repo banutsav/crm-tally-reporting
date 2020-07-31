@@ -13,11 +13,14 @@ def get_leads_by_group_quarterly(df):
 	# iterate across the product categories
 	print('Leads by Product Group aggregated quarterly...')
 	for cat in pc:
+		
 		# rows of that product category and contract ID created before creation date
 		data = df.loc[(df['Product Category'] == cat)  # product category match
 		& ((df['Opportunity Status'] == 'Open') | (df['Opportunity Status'].isnull()))
+		& (df['Lead Status'] != 'Disqualified') # lead not disqualified
 		& (df[props.CREATED_ON_COL] < props.CREATION_DATE)
 		, :]
+		
 		# nothing to do if all rows empty
 		if data.shape[0] != 0:
 			result = group_quarterly_revenue(data, cat, result, 'before-' + props.CREATION_DATE.strftime("%d-%b-%Y"))
@@ -28,6 +31,7 @@ def get_leads_by_group_quarterly(df):
 		& (df['Lead Status'] != 'Disqualified') # lead not disqualified
 		& (df[props.CREATED_ON_COL] >= props.CREATION_DATE)
 		, :]
+		
 		# nothing to do if all rows empty
 		if data.shape[0] != 0:
 			result = group_quarterly_revenue(data, cat, result, 'after-' + props.CREATION_DATE.strftime("%d-%b-%Y"))
@@ -36,6 +40,23 @@ def get_leads_by_group_quarterly(df):
 
 # group the revenue by quarters
 def group_quarterly_revenue(data, cat, result, created):
+	
+	# purchase timeframe before first quarter
+	df = data.loc[(data[props.UP_PURCH_COL] < props.QUARTERS[0]), :]
+	# calculated revenue sum
+	revenue = df[props.REVENUE_COL].sum()
+	# append row to result
+	result = result.append({'product-group': cat
+		, 'creation-date': created
+		, 'quarter': 'Before-Q1' 
+		, 'start': ""
+		, 'end': props.QUARTERS[0] # get end of that quarter
+		, 'order-booking-value': revenue
+		, 'number-of-orders': df.shape[0]
+		, 'order-ids': df['Offer ID'].tolist() # all the order id's of that product group
+	}, ignore_index=True)
+
+
 	# iterate over the quarters
 	for i in range(1,len(props.QUARTERS)):
 		# start and end for that quarter
