@@ -45,6 +45,7 @@ if __name__ == '__main__':
 	sfp_wp_df = sfp_wp.sales_funnel_performance_with_phase_data(crmdf) # sales_funnel_pipeline.py
 	# bi-weekly performance summary
 	lc_bw_df = bw.leads_created_biweekly(crmdf, biweekly_dates) # indi_biweek.py
+	
 	# po won biweekly performance
 	powon_bw_df = powon.po_won_biweekly(crmdf, biweekly_dates) # po_won_biweekly.py
 	
@@ -73,6 +74,7 @@ if __name__ == '__main__':
 	
 	lc_bw_df.to_excel(writer, 'leads-created-biweekly', index=False) # indi_biweek.py
 	powon_bw_df.to_excel(writer, 'po-won-biweekly', index=False) # po_won_biweekly.py
+	
 	powon_q_df.to_excel(writer, 'po-won-quarterly', index=False) # po_won_quarterly.py
 	
 	group_leads_q_df.to_excel(writer, 'product-leads-quarterly', index=False) # leads_product_quarterly.py
@@ -86,7 +88,7 @@ if __name__ == '__main__':
 	crmdf.to_excel(writer, 'crm-master', index=False)
 	lost_cases_df.to_excel(writer, 'lost-cases-master', index=False)
 	writer.save()
-
+	
 	print('Results saved to', props.OUTFILE)
 	# calculate execution time
 	end = time.time()

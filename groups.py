@@ -15,6 +15,7 @@ def ht_summary(df):
 		data = df.loc[(df['Product Category'] == cat)  # product category match
 		& (df[props.CONTRACT_ID].notnull()) # non null contract number
 		& (df[props.CONTRACT_ID] != '0') # some rows have contract id set to 0
+		& (df['Opportunity Status'] == 'Won')
 		& (df[props.CLOSE_DATE_COL] > props.CLOSE_DATE)
 		, ['Offer ID',props.REVENUE_COL]]
 		# calculated revenue sum
