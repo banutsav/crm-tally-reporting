@@ -22,10 +22,9 @@ import powon_product_quarterly as powpq
 import expired_leads as exl
 import joint_report as jr
 
-if __name__ == '__main__':
-	start = time.time()
-	print('Execution started...')
 
+# main driving function
+def master():
 	# read data into dataframe
 	xls = pd.ExcelFile(props.IN_FILE)
 	crmdf = pd.read_excel(xls, xls.sheet_names[0]) # read first sheet | props.IN_TAB
@@ -90,6 +89,18 @@ if __name__ == '__main__':
 	writer.save()
 	
 	print('Results saved to', props.OUTFILE)
+
+
+if __name__ == '__main__':
+	start = time.time()
+	print('Execution started...')
+
+	try:
+		master()
+	# exception
+	except Exception as e:
+		print('[ERROR] There was an issue with the execution:',e)
+	
 	# calculate execution time
 	end = time.time()
 	print('Execution finished in',str(round(end - start,2)),'secs')

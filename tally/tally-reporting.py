@@ -12,10 +12,8 @@ import indi_payments_due as ipaydue
 import direct_cost as dc
 import opening_debtors as od
 
-if __name__ == '__main__':
-	start = time.time()
-	print('Execution started...')
-
+# main driving function
+def master():
 	# init output file
 	writer = ExcelWriter(props.OUTFILE)
 	
@@ -49,6 +47,19 @@ if __name__ == '__main__':
 	# save results
 	writer.save()
 	print('Results saved to', props.OUTFILE)
+
+
+if __name__ == '__main__':
+	
+	start = time.time()
+	print('Execution started...')
+
+	try:
+		master()
+	# exception
+	except Exception as e:
+		print('[ERROR] There was an issue with the execution:',e)
+	
 	# calculate execution time
 	end = time.time()
 	print('Execution finished in',str(round(end - start,2)),'secs')
