@@ -24,13 +24,13 @@ def individual_payments_due(df):
 			continue
 
 		# get before or after based on the reference number
-		invoiced_date = hp.get_before_after_ref_no(row['Ref. No.'])
+		invoiced_date = hp.get_before_after_fy(row['Ref. No.'])
 
 		# get the quarter
 		quarter = hp.get_quarter(row[props.RECEIVABLES_DATE])
 		obj = {'person': row['Agent'], 'product-group': row['Product']
 		, 'payments-due': row['Pending'], 'date': row[props.RECEIVABLES_DATE]
-		, 'quarter': quarter, 'invoiced-date': invoiced_date, 'reference-number': row['Ref. No.']}
+		, 'quarter': quarter, 'invoiced-date': invoiced_date, 'reference-number': row['Ref. No.'].replace(" ", "")}
 		results = results.append(obj, ignore_index=True)
 	
 	return results

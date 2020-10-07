@@ -27,14 +27,3 @@ def get_before_after_fy(voucher):
 		return ('after-' + props.FY_START_DATE.strftime("%d-%b-%Y"))
 	else:
 		return ('before-' + props.FY_START_DATE.strftime("%d-%b-%Y"))
-
-# get before or after based on the reference number
-def get_before_after_ref_no(reference):
-	# replace any spaces
-	reference = reference.replace(" ", "")
-	year = reference[5:7]
-	#print(reference, year)
-	if year == '20':
-		return ('after-' + props.FY_START_DATE.strftime("%d-%b-%Y"))
-	else:
-		return ('before-' + props.FY_START_DATE.strftime("%d-%b-%Y"))

@@ -37,7 +37,7 @@ def individual_orders_bagged(df):
 		# construct object
 		obj = {'person': row['Agent'], 'product-group': row['Cost Centre']
 		, 'gross-total': row['gross-total'], 'date': row['Date'], 'quarter': quarter
-		, 'invoiced-date': invoiced_date, 'voucher-number': row['Voucher No.']}
+		, 'invoiced-date': invoiced_date, 'voucher-number': row['Voucher No.'].replace(" ", "")}
 		results = results.append(obj, ignore_index=True)
 	
 	return results
