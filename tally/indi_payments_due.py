@@ -15,7 +15,7 @@ def individual_payments_due(df):
 
 	# iterate over the set of people
 	print('Individual Payments Due...')
-	data = df[[props.RECEIVABLES_DATE, 'Agent', 'Product', 'Pending', 'Ref. No.']]
+	data = df[[props.RECEIVABLES_DATE, 'Agent', 'Product', 'Pending', 'Ref. No.', "Party's Name", 'Due on', 'Overdue']]
 	
 	# iterate over all results
 	for index, row in data.iterrows():
@@ -30,7 +30,9 @@ def individual_payments_due(df):
 		quarter = hp.get_quarter(row[props.RECEIVABLES_DATE])
 		obj = {'person': row['Agent'], 'product-group': row['Product']
 		, 'payments-due': row['Pending'], 'date': row[props.RECEIVABLES_DATE]
-		, 'quarter': quarter, 'invoiced-date': invoiced_date, 'reference-number': row['Ref. No.'].replace(" ", "")}
+		, 'quarter': quarter, 'invoiced-date': invoiced_date, 'reference-number': row['Ref. No.'].replace(" ", "")
+		, 'partys-name': row["Party's Name"], 'due-on': row['Due on'], 'overdue': row['Overdue']
+		}
 		results = results.append(obj, ignore_index=True)
 	
 	return results
