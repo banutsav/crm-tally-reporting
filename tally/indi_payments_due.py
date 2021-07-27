@@ -10,8 +10,9 @@ def individual_payments_due(df):
 
 	# replace null values with 0
 	df['Pending'].fillna(0, inplace = True)
+	
 	# drop rows for blank people and bank products
-	df = df.dropna(subset=['Agent', 'Product'])
+	df = df.dropna(subset=['Agent', 'Product']) # "Party's Name"
 
 	# iterate over the set of people
 	print('Individual Payments Due...')
@@ -19,9 +20,12 @@ def individual_payments_due(df):
 	
 	# iterate over all results
 	for index, row in data.iterrows():
+
 		# disregard product group = lease, treasury
 		if row['Product'] in props.NOT_PRODUCT_GROUPS:
 			continue
+
+		#print(index, row["Party's Name"], row['Ref. No.'])		
 
 		# get before or after based on the reference number
 		invoiced_date = hp.get_before_after_fy(row['Ref. No.'])

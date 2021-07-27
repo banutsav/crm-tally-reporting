@@ -17,15 +17,15 @@ STOCK_TAB = 'Stock Summary'
 
 # start date breakdown for the quarters
 QUARTERS = [
-	pd.Timestamp(datetime.date(2020, 4, 1)) # 1st april
-	, pd.Timestamp(datetime.date(2020, 7, 1)) # 1st july
-	, pd.Timestamp(datetime.date(2020, 10, 1)) # 1st october 
-	, pd.Timestamp(datetime.date(2021, 1, 1)) # 1st Jan next year
-	, pd.Timestamp(datetime.date(2021, 4, 1)) # 1st april next year
+	pd.Timestamp(datetime.date(2021, 4, 1)) # 1st april
+	, pd.Timestamp(datetime.date(2021, 7, 1)) # 1st july
+	, pd.Timestamp(datetime.date(2021, 10, 1)) # 1st october 
+	, pd.Timestamp(datetime.date(2022, 1, 1)) # 1st Jan next year
+	, pd.Timestamp(datetime.date(2022, 4, 1)) # 1st april next year
 ]
 
 # for order invoicing
-FY_START_DATE = pd.Timestamp(datetime.date(2020, 4, 1)) # 1st april
+FY_START_DATE = pd.Timestamp(datetime.date(2021, 4, 1)) # 1st april
 
 # indi_orders.py
 INDI_ORDER_BAGGED_HEADER = ['person', 'product-group', 'gross-total', 'date', 'quarter', 'invoiced-date', 'voucher-number']

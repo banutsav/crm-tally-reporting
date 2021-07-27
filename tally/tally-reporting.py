@@ -1,3 +1,4 @@
+import sys, os
 from os import listdir
 from os.path import isfile, join
 import time
@@ -95,6 +96,10 @@ if __name__ == '__main__':
 	# exception
 	except Exception as e:
 		print('[ERROR] There was an issue with the execution:',e)
+		exc_type, exc_obj, exc_tb = sys.exc_info()
+		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+		print(exc_type, fname, exc_tb.tb_lineno)
+		#print(e.tostring())
 	
 	# calculate execution time
 	end = time.time()

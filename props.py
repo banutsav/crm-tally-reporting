@@ -2,18 +2,18 @@ import pandas as pd
 import datetime
 
 # set close date cutoff
-CLOSE_DATE = pd.Timestamp(datetime.date(2020, 3, 31)) #datetime.date(2020, 3, 31)
+CLOSE_DATE = pd.Timestamp(datetime.date(2021, 3, 31))
 
 # creation date for sales funnel performance
-CREATION_DATE = pd.Timestamp(datetime.date(2020, 4, 1)) #datetime.date(2020, 4, 1)
+CREATION_DATE = pd.Timestamp(datetime.date(2021, 4, 1))
 
 # start date breakdown for the quarters
 QUARTERS = [
-	pd.Timestamp(datetime.date(2020, 4, 1)) # 1st april
-	, pd.Timestamp(datetime.date(2020, 7, 1)) # 1st july
-	, pd.Timestamp(datetime.date(2020, 10, 1)) # 1st october 
-	, pd.Timestamp(datetime.date(2021, 1, 1)) # 1st Jan next year
-	, pd.Timestamp(datetime.date(2021, 4, 1)) # 1st april next year
+	pd.Timestamp(datetime.date(2021, 4, 1)) # 1st april
+	, pd.Timestamp(datetime.date(2021, 7, 1)) # 1st july
+	, pd.Timestamp(datetime.date(2021, 10, 1)) # 1st october 
+	, pd.Timestamp(datetime.date(2022, 1, 1)) # 1st Jan next year
+	, pd.Timestamp(datetime.date(2022, 4, 1)) # 1st april next year
 ]
 
 # input file
