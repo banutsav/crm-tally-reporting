@@ -48,7 +48,7 @@ CLOSE_DATE_COL = 'Actual Close Date'
 # joint report offer id's like
 JOINT_REPORT_OFFER_IDS = 'HT21'
 
-OUTFILE = 'results-' + pd.Timestamp.now().strftime("%d-%m-%Y") + '.xlsx' # output file
+OUTFILE = '/content/results-' + pd.Timestamp.now().strftime("%d-%m-%Y") + '.xlsx' # output file
 
 HT_SUMMARY_HEADER = ['product-group', 'order-booking-value', 'number-of-orders', 'order-ids']
 
