@@ -29,7 +29,7 @@ def construct_dataframes():
   # init the dataframe lists
   sales = []; receivables = []; stock = []
   
-  mypath = INPUT_FOLDER
+  mypath = props.INPUT_FOLDER
   print("Checking files under...", mypath)
   files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
   
@@ -96,20 +96,9 @@ if __name__ == '__main__':
 	
 	start = time.time()
 	print('Execution started...')
+	salesdf, receivablesdf, stockdf = construct_dataframes()
+	master(salesdf, receivablesdf, stockdf)
 
-	try:
-		salesdf, receivablesdf, stockdf = construct_dataframes()
-		master(salesdf, receivablesdf, stockdf)
-	
-	# exception
-	except Exception as e:
-		print('[ERROR] There was an issue with the execution:',e)
-		exc_type, exc_obj, exc_tb = sys.exc_info()
-		fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-		print(exc_type, fname, exc_tb.tb_lineno)
-		#print(e.tostring())
-	
 	# calculate execution time
 	end = time.time()
 	print('Execution finished in',str(round(end - start,2)),'secs')
-	input('You can close this window now...')
