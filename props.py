@@ -17,10 +17,10 @@ QUARTERS = [
 ]
 
 # input file
-IN_FILE = 'input/data.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx, sample-set-rv-1
+IN_FILE = '/content/data.xlsx' # 'Leads and opportunities_FY20-21, sample-data-set.xlsx, sample-set-rv-1
 IN_TAB = 'sheet' # 'CRM report, Sheet1, Revised Sample set_2620'
-PROPERTIES_FILE = 'input/properties.xlsx'
-LOST_CASES_FILE = 'input/lost.xlsx'
+PROPERTIES_FILE = '/content/input/properties.xlsx'
+LOST_CASES_FILE = '/content/input/lost.xlsx'
 
 DATE_TAB = 'biweek' # properties file for biweekly dates
 
