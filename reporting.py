@@ -94,14 +94,7 @@ def master():
 if __name__ == '__main__':
 	start = time.time()
 	print('Execution started...')
-
-	try:
-		master()
-	# exception
-	except Exception as e:
-		print('[ERROR] There was an issue with the execution:',e)
-	
+	master()
 	# calculate execution time
 	end = time.time()
 	print('Execution finished in',str(round(end - start,2)),'secs')
-	input('You can close this window now...')
