@@ -15,42 +15,50 @@ import indi_payments_due as ipaydue
 import direct_cost as dc
 import opening_debtors as od
 
+import sys, os
+from os import listdir
+from os.path import isfile, join
+import time
+import datetime
+import numpy as np
+import pandas as pd
+pd.options.mode.chained_assignment = None  # default='warn'
+
 # check files in input folder to construct sales, receivables and stock data frames
 def construct_dataframes():
-	
-	# init the dataframe lists
-	sales = []; receivables = []; stock = []
-
-	mypath = props.INPUT_FOLDER
-	files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-	
-	# check files
-	for file in files:
-		
-		# ignore if not an excel file
-		if '.xls' not in file.lower():
-			continue
+  # init the dataframe lists
+  sales = []; receivables = []; stock = []
+  
+  mypath = INPUT_FOLDER
+  print("Checking files under...", mypath)
+  files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+  
+  # check files
+  for file in files:
+    # ignore if not an excel file
+    if '.xls' not in file.lower():
+      continue
 
 		# construct dataframe from file
-		filepath = mypath + '/' + file
-		xls = pd.ExcelFile(filepath)
-		df = pd.read_excel(xls, xls.sheet_names[0])
-		
-		# put into combined sales list
-		filename = file.strip().lower()
-		if 'sale' in filename:
-			sales.append(df)
-		elif 'receivable' in filename:
-			receivables.append(df)
-		elif 'stock' in filename:
-			stock.append(df)
-	
-	# construct individual dataframes
-	salesdf = pd.concat(sales)
-	receivablesdf = pd.concat(receivables)
-	stockdf = pd.concat(stock)
-	
-	return salesdf, receivablesdf, stockdf
+    filepath = mypath + '/' + file
+    xls = pd.ExcelFile(filepath)
+    df = pd.read_excel(xls, xls.sheet_names[0])
+    
+    # put into combined sales list
+    filename = file.strip().lower()
+    if 'sale' in filename:
+      sales.append(df)
+    elif 'receivable' in filename:
+      receivables.append(df)
+    elif 'stock' in filename:
+      stock.append(df)
+  
+  # construct individual dataframes
+  salesdf = pd.concat(sales)
+  receivablesdf = pd.concat(receivables)
+  stockdf = pd.concat(stock)
+  
+  return salesdf, receivablesdf, stockdf
 
 
 # main driving function

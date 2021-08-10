@@ -7,13 +7,7 @@ import datetime
 OUTFILE = 'tally-results-'  + pd.Timestamp.now().strftime("%d-%m-%Y") + '.xlsx' # output file
 
 # input files
-INPUT_FOLDER = 'input'
-SALES = 'input/Sales.xls'
-SALES_TAB = 'Sales Register'
-RECEIVABLES = 'input/Receivables.xls'
-RECEIVABLES_TAB = 'Bills Receivable'
-STOCK = 'input/Stock.xls'
-STOCK_TAB = 'Stock Summary'
+INPUT_FOLDER = '/content' # 'input'
 
 # start date breakdown for the quarters
 QUARTERS = [
